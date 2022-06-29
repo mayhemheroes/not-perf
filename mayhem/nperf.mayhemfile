@@ -1,0 +1,7 @@
+project: not-perf
+target: nperf
+
+cmds:
+  - cmd: /nperf flamegraph /fuzz.nperf
+    filepath: /fuzz.nperf
+    max_length: 9000000
