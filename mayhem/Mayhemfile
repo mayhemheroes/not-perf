@@ -1,0 +1,15 @@
+project: not-perf
+# Historical target NAME preserved (old CLI Mayhemfile used `target: nperf`) so Mayhem run
+# history isn't orphaned. Now an instrumented in-process libFuzzer binary over the same
+# .nperf archive parse + collate code path.
+target: nperf
+
+cmds:
+  # libFuzzer target: Mayhem drives inputs through the libFuzzer entrypoint, so NO '@@'
+  # (Mayhem rejects '@@' on a libfuzzer:true target).
+  - cmd: /mayhem/nperf
+    libfuzzer: true
+
+testsuite:
+  - https://$MAYHEM_DOMAIN/$MAYHEM_PROJECT/$MAYHEM_TARGET/testsuite.tar
+  - file://mayhem/nperf/testsuite

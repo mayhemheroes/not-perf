@@ -1,0 +1,28 @@
+[package]
+name = "nperf-fuzz"
+version = "0.0.0"
+publish = false
+edition = "2018"
+
+[package.metadata]
+cargo-fuzz = true
+
+[dependencies]
+libfuzzer-sys = "0.4"
+
+[dependencies.nperf-core]
+path = "../.."
+
+[[bin]]
+name = "nperf"
+path = "fuzz_targets/nperf.rs"
+test = false
+doc = false
+bench = false
+
+# Own workspace so the parent workspace's `[profile.release] panic = "abort"` does
+# NOT apply here — the harness needs the default unwind strategy so catch_unwind can
+# swallow the parser's expected panics on malformed input (invalid header/version),
+# letting the fuzzer drive DEEP into the DWARF/unwinding code to find memory bugs
+# instead of aborting on input 0. Genuine ASan memory errors still abort → reported.
+[workspace]
